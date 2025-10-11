@@ -25,7 +25,7 @@ role: userRoles;
 address: string;
 
 @Column({ nullable: false })
-phone: number;
+phone: string;
 
 @Column({ type: "enum", enum: userGender, default: userGender.NOT_SPECIFIED})
 gender: userGender;
@@ -36,11 +36,11 @@ profile_image: string;
 @Column({ default: false })
 isVerified: boolean;
 
-@Column({ default: false })
+@Column({ default: true })
 isActive: boolean;
 
 @Column({ nullable: true, default: null })
-otp: number;
+otp: string;
 
 @CreateDateColumn()
 createdAt: Date;

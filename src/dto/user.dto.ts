@@ -2,7 +2,7 @@ import {
   IsString,
   IsEmail,
   IsOptional,
-  IsNumber
+  Matches
 } from "class-validator";
 
 export class UserDto {
@@ -24,8 +24,10 @@ export class UserDto {
   @IsString()
   address: string;
 
-  @IsNumber()
-  phone: number;
+  @Matches(/^(?:\+|00)[1-9]\d{1,14}$/, {
+    message: 'Phone number must start with + or 00 and be valid',
+  })
+  phone: string;
 
   @IsString()
   gender: string;
