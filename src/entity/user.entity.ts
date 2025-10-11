@@ -1,9 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
-
-enum userRoles {
-  ADMIN = "admin",
-  USER = "user",
-}
+import { userRoles, userGender } from "../enum/user.enum.ts";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -31,19 +27,19 @@ address: string;
 @Column({ nullable: false })
 phone: number;
 
-@Column({ nullable: false })
-gender: string;
+@Column({ type: "enum", enum: userGender, default: userGender.NOT_SPECIFIED})
+gender: userGender;
 
-@Column({ nullable: false })
+@Column({ nullable: true })
 profile_image: string;
 
 @Column({ default: false })
 isVerified: boolean;
 
-@Column({ default: false})
+@Column({ default: false })
 isActive: boolean;
 
-@Column()
+@Column({ nullable: true, default: null })
 otp: number;
 
 @CreateDateColumn()
