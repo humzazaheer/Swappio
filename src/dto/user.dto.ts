@@ -1,6 +1,8 @@
 import {
   IsString,
-  IsEmail
+  IsEmail,
+  IsOptional,
+  IsNumber
 } from "class-validator";
 
 export class UserDto {
@@ -22,12 +24,13 @@ export class UserDto {
   @IsString()
   address: string;
 
-  @IsString()
+  @IsNumber()
   phone: number;
 
   @IsString()
   gender: string;
 
   @IsString()
+  @IsOptional()
   profile_image: string;
 }
