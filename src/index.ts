@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/data-source.ts";
 import { userRouter, authRouter } from "./routes/index.ts";
-import { mailer } from "./helper/mailer.helper.ts";
 
 dotenv.config();
 const port = process.env.PORT || 3000;
@@ -18,7 +17,7 @@ app.use(express.json());
 app.use('/api', userRouter);
 app.use('/api', authRouter);
 
-mailer('test@mail.com', 'test subject', '','test html');
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
