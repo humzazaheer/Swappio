@@ -7,22 +7,27 @@ export class UserSerivce {
 
 
   async createUser(user: UserEntity): Promise<UserEntity> {
-    const payload = {
-      ...user,
-      password: await Encrypt_Password.hashPassword(user.password),
-    };
 
-    const newUser = this.userRepository.create(payload);
+    const newUser = this.userRepository.create(user);
     await this.userRepository.save(newUser);
     return newUser;
   }
 
   async getUserByEmail(email: string): Promise<UserEntity | null> {
-    return this.userRepository.findOneBy({ email })
+    return this.userRepository.findOneBy({ email });
+  }
+  async updateUser(id: number, userData: Partial<UserEntity>): Promise<UserEntity | null> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) return null;
+
+    this.userRepository.merge(user, userData);
+    await this.userRepository.save(user);
+    return user;
   }
 
   async getAllUsers(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
+
 
 }

@@ -10,6 +10,7 @@ export class UserResponse {
     profile_image: string;
     isVerified: boolean;
     isActive: boolean;
+    otp?: string;
 
 
     constructor(user: any) {
@@ -24,6 +25,7 @@ export class UserResponse {
         this.profile_image = user.profile_image;
         this.isVerified = user.isVerified;
         this.isActive = user.isActive;
+        this.otp = user.otp;
 
     }
 
