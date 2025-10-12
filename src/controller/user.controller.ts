@@ -29,19 +29,50 @@ export class UserController {
       `<p>Hi ${user.firstName} ${user.lastName}, your OTP is ${otp} OTP will expire in 2 minutes, please verify your account.</p>`
     );
 
-        if (mail?.info) {
-            // adding 2 minutes to current time, OTP validity 2 minutes
-            const otpValidTill = new Date(new Date().getTime() + 2 * 60000);
-            const payload = await userRepository.createUser({ ...user, otp, password: await Encrypt_Password.hashPassword(user.password), otpValidTill: otpValidTill });
-            res.status(200).json({ mesage: `Hi ${user.firstName} ${user.lastName}, an OTP is sent to your email, please verify your account.`, user: new UserResponse(payload) });
-
-        } else {
-            console.log("Error sending email: ", mail?.error);
-            res.status(401).json({ mesage: "OPT not sent, something went wrong." });
-        }
+    if (mail?.info) {
+      // adding 2 minutes to current time, OTP validity 2 minutes
+      const otpValidTill = new Date(new Date().getTime() + 2 * 60000);
+      const payload = await userRepository.createUser({
+        ...user,
+        otp,
+        password: await Encrypt_Password.hashPassword(user.password),
+        otpValidTill: otpValidTill,
+      });
+      res
+        .status(200)
+        .json({
+          mesage: `Hi ${user.firstName} ${user.lastName}, an OTP is sent to your email, please verify your account.`,
+          user: new UserResponse(payload),
+        });
+    } else {
+      console.log("Error sending email: ", mail?.error);
+      res.status(401).json({ mesage: "OPT not sent, something went wrong." });
     }
-    static getAllUsers = async (req: Request, res: Response) => {
-        const allUsers = await userRepository.getAllUsers();
-        res.status(200).json(allUsers);
+  };
+  static getAllUsers = async (req: Request, res: Response) => {
+    const allUsers = await userRepository.getAllUsers();
+    res.status(200).json(allUsers);
+  };
+  static deleteUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const isDeleted = await userRepository.deleteUser(Number(id));
+    if (isDeleted) {
+      res.status(200).json({ message: "User deleted successfully!" });
+    } else {
+      res.status(404).json({ message: "User not found!" });
     }
+  };
+  static updateUser = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const user = await userRepository.updateUser(Number(id), req.body);
+    if (!user) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+    res
+      .status(200)
+      .json({
+        message: "User updated successfully!",
+        user: new UserResponse(user),
+      });
+  };
 }
