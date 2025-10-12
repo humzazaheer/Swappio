@@ -21,4 +21,8 @@ export class UserSerivce {
     return this.userRepository.findOneBy({ email })
   }
 
+  async getAllUsers(): Promise<UserEntity[]> {
+    return this.userRepository.find();
+  }
+
 }
