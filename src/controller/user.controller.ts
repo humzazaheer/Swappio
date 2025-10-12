@@ -4,6 +4,7 @@ import { UserResponse } from "../dto/response/user.response.ts";
 import { Encrypt_Password } from "../helper/password.helper.ts";
 import { otpGenerator } from "../helper/otp.helper.ts";
 import { mailer } from "../helper/mailer.helper.ts";
+import { error } from "console";
 
 export class UserController {
     static createUser = async (req: Request, res: Response) => {
@@ -38,7 +39,7 @@ export class UserController {
 
         } else {
             console.log("Error sending email: ", mail?.error);
-            res.status(401).json({ mesage: "OPT not sent, something went wrong." });
+            res.status(401).json({ mesage: "OPT not sent, something went wrong.", error: mail?.error });
         }
     }
 }
