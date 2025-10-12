@@ -29,5 +29,10 @@ export class UserSerivce {
     return this.userRepository.find();
   }
 
+  async deleteUser(id: number): Promise<boolean> {
+    const deletedUser = await this.userRepository.delete(id);
+    return deletedUser.affected !== 0
+  }
+
 
 }

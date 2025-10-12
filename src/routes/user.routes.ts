@@ -5,6 +5,6 @@ import { userValidator } from "../middleware/user.validator.ts";
 export const userRouter = Router();
 
 userRouter.get("/users", UserController.getAllUsers);
-userRouter.post("/user", userValidator, UserController.createUser);
-// userRouter.put("/user/:id");
-// userRouter.delete("/user/:id");
+userRouter.post("/user/create", userValidator, UserController.createUser);
+userRouter.put("/user/update/:id", userValidator, UserController.updateUser);
+userRouter.delete("/user/delete/:id", UserController.deleteUser);

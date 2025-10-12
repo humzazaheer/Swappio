@@ -39,11 +39,11 @@ export class UserEntity {
     @Column({ default: true })
     isActive: boolean;
 
-    @Column({ nullable: true, default: null })
-    otp: string;
+    @Column({ type: "varchar", nullable: true, default: null })
+    otp: string | null;
 
     @Column({ type: "timestamp", nullable: true, default: null })
-    otpValidTill: Date;
+    otpValidTill: Date | null;
 
     @CreateDateColumn()
     createdAt: Date;

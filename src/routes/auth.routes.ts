@@ -5,6 +5,7 @@ export const authRouter = Router();
 
 // authRouter.post("/auth/register");
 authRouter.post("/auth/login", AuthController.login);
-// authRouter.post("/auth/forgot-password");
-// authRouter.post("/auth/reset-password");
+authRouter.post("/auth/forgot-password", AuthController.forgotPassword);
+authRouter.post("/auth/verify-otp", AuthController.verifyOtp);
+authRouter.post("/auth/reset-password", AuthController.resetPassword);
 // authRouter.post("/auth/change-password");

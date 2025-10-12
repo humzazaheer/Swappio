@@ -37,10 +37,15 @@ export const mailer = async (
       html: html,
     });
     return {
+      sent: true,
       message: "Email sent successfully",
       info: info,
     };
   } catch (error) {
-    console.error("Error sending email:", error);
+    return {
+      sent: false,
+      message: "Error sending email",
+      error: error,
+    };
   }
 };

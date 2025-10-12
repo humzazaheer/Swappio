@@ -53,12 +53,47 @@ export class AuthController {
         if (!checkUser) {
             res.status(404).json({ message: "Email does not exist...!" });
         }
+        else {
+            const otp = otpGenerator();
+            const otpValidTill = new Date(new Date().getTime() + 2 * 60000);
+            await userRepository.updateUser(checkUser.id, { otp, otpValidTill });
+            const mail = await mailer(
+                req.body.email,
+                "Password Reset",
+                '',
+                `Hi ${checkUser.firstName} ${checkUser.lastName}, your OTP is <strong>${otp}</strong>. OTP will expire in 2 minutes, please verify to reset your password.`,
+            )
+            mail.sent ? res.status(200).json({message: mail.message}) : res.status(400).json({message: mail.message});
+            
+        }
         
+    }
+
+    // verify otp
+
+    static async verifyOtp(req: Request, res: Response) {
+        const {email, otp} = req.body;
+        const user = await userRepository.getUserByEmail(email);
+        if(!user || !user.otp || !user.otpValidTill || user.otp !== otp || user.otpValidTill < new Date()) {
+            res.status(400).json({message: "Invalid or expired OTP."});
+        } else {
+            await userRepository.updateUser(user.id, {otp: null, otpValidTill: null});
+            
+            res.status(200).json({message: "OTP verified successfully."});
+        }
     }
 
     // reset password
 
     static async resetPassword(req: Request, res: Response) {
+        const {email, password} = req.body;
+        const user = await userRepository.getUserByEmail(email);
+        if(!user) {
+            res.status(404).json({message: "User not found."});
+        } else {
+            await userRepository.updateUser(user.id, {password: await Encrypt_Password.hashPassword(password)});
+            res.status(200).json({message: "Password reset successfully."});
+        }
         
     }
 }
