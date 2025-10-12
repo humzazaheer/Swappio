@@ -11,6 +11,7 @@ export class UserResponse {
     isVerified: boolean;
     isActive: boolean;
     otp?: string;
+    otpValidTill?: string;
 
 
     constructor(user: any) {
@@ -26,7 +27,7 @@ export class UserResponse {
         this.isVerified = user.isVerified;
         this.isActive = user.isActive;
         this.otp = user.otp;
-
+        this.otpValidTill = user.otpValidTill;
     }
 
 }

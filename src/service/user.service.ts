@@ -16,6 +16,9 @@ export class UserSerivce {
   async getUserByEmail(email: string): Promise<UserEntity | null> {
     return this.userRepository.findOneBy({ email });
   }
+  async getUserById(id: number): Promise<UserEntity | null> {
+    return this.userRepository.findOneBy({ id });
+  }
   async updateUser(id: number, userData: Partial<UserEntity>): Promise<UserEntity | null> {
     const user = await this.userRepository.findOneBy({ id });
     if (!user) return null;
