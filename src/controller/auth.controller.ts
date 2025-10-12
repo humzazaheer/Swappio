@@ -21,29 +21,68 @@ export class AuthController {
 
 
 
-    // static async verifyOtp(req: Request, res: Response) {
-    //     const { email, otp } = req.body;
-    //     const user = await userRepository.getUserByEmail(email);
+    static async verifyAccount(req: Request, res: Response) {
+        const { email, otp } = req.body;
+        const user = await userRepository.getUserByEmail(email);
 
-    //     if (!user) {
-    //         return res.status(404).json({ message: "User not found." });
-    //     }
+        if (!user) {
+            return res.status(404).json({ message: "User not found." });
+        }
 
-    //     if (user.otp !== otp) {
-    //         return res.status(400).json({ message: "Invalid OTP." });
-    //     }
 
-    //     // OTP is correct, verify user and clear OTP
-    //     const updatedUser = await userRepository.updateUser(user.id, { isVerified: true, otp: 'null' });
+        if (user.otpValidTill && new Date() > new Date(user.otpValidTill)) {
+            // return res.status(400).json({ message: "OTP has expired." });
 
-    //     const token = await Token.generateToken({ id: user.id });
-    //     const refreshToken = await Token.generateRefereshToken({ id: user.id });
+            // OTP expired, generate new OTP and send email
+            const otp = otpGenerator();
+            const otpValidTill = new Date(new Date().getTime() + 2 * 60000);
+            const mail = await mailer(
+                email,
+                "Account Verification",
+                `Hi ${user.firstName} ${user.lastName}, your OTP has expired, here is your new OTP ${otp}. OTP will expire in 2 minutes, please verify your account.`,
+                `<p>Hi ${user.firstName} ${user.lastName}, your OTP has expired, here is your new OTP ${otp}. OTP will expire in 2 minutes, please verify your account.</p>`,
+            );
 
-    //     res.status(200).json({ message: "Account verified successfully.", user: new UserResponse(updatedUser), token, refreshToken });
-    // }
+            if (mail?.info) {
+                // adding 2 minutes to current time, OTP validity 2 minutes
 
-    static async regenerateToken(req: Request, res: Response) {
+                const payload = await userRepository.createUser({ ...user, otp, otpValidTill: otpValidTill });
+                res.status(200).json({ mesage: `Hi ${user.firstName} ${user.lastName}, your OTP has expired,a new OTP is sent to your email, please verify your account.`, user: new UserResponse(payload) });
 
+            } else {
+                console.log("Error sending email: ", mail?.error);
+                res.status(401).json({ mesage: "OPT not sent, something went wrong.", error: mail?.error });
+            }
+        }
+        else {
+            if (user.otp !== otp) {
+                return res.status(400).json({ message: "Invalid OTP." });
+            }
+            else {
+                // OTP is correct, verify user and clear OTP and time validity
+                const updatedUser = await userRepository.updateUser(user.id, { isVerified: true, otp: null, otpValidTill: null });
+                res.status(200).json({ message: "Account verified successfully.", user: new UserResponse(updatedUser) });
+            }
+        }
+
+
+
+    }
+
+    static async regenerateTokens(req: Request, res: Response) {
+        const { refreshToken } = req.body;
+        const decode = await Token.verifyToken(refreshToken);
+        if (!decode) {
+            return res.status(401).json({ message: "Invalid token." });
+        }
+        try {
+            const newToken = await Token.generateToken({ id: decode.id });
+            const newRefreshToken = await Token.generateRefereshToken({ id: decode.id });
+            res.status(200).json({ message: "Token refreshed.", token: newToken, refreshToken: newRefreshToken });
+
+        } catch (error) {
+            res.status(401).json({ message: "Invalid refresh token" });
+        }
     }
 
     // forgot password
@@ -67,6 +106,7 @@ export class AuthController {
             
         }
         
+
     }
 
     // verify otp
@@ -95,5 +135,6 @@ export class AuthController {
             res.status(200).json({message: "Password reset successfully."});
         }
         
+
     }
 }
