@@ -25,6 +25,9 @@ export class UserSerivce {
     return user;
   }
 
+  async getAllUsers(): Promise<UserEntity[]> {
+    return this.userRepository.find();
+  }
 
 
 }

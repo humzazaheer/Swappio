@@ -45,4 +45,20 @@ export class AuthController {
     static async regenerateToken(req: Request, res: Response) {
 
     }
+
+    // forgot password
+
+    static async forgotPassword(req: Request, res: Response) {
+        const checkUser = await userRepository.getUserByEmail(req.body.email);
+        if (!checkUser) {
+            res.status(404).json({ message: "Email does not exist...!" });
+        }
+        
+    }
+
+    // reset password
+
+    static async resetPassword(req: Request, res: Response) {
+        
+    }
 }

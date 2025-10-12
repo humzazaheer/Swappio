@@ -4,7 +4,7 @@ import { userValidator } from "../middleware/user.validator.ts";
 
 export const userRouter = Router();
 
-// userRouter.get("/user");
+userRouter.get("/users", UserController.getAllUsers);
 userRouter.post("/user", userValidator, UserController.createUser);
 // userRouter.put("/user/:id");
 // userRouter.delete("/user/:id");

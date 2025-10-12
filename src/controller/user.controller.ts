@@ -42,4 +42,8 @@ export class UserController {
             res.status(401).json({ mesage: "OPT not sent, something went wrong.", error: mail?.error });
         }
     }
+    static getAllUsers = async (req: Request, res: Response) => {
+        const allUsers = await userRepository.getAllUsers();
+        res.status(200).json(allUsers);
+    }
 }
