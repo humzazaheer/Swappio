@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AdLocationEntity } from "./ad_locations.ts";
 
 @Entity('locations')
-export class Categories {
+export class LocationEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -13,6 +14,9 @@ export class Categories {
     
     @Column({ default: true })
     isActive: boolean;
+
+    @OneToMany(() => AdLocationEntity, (ad_locations) => ad_locations.locations)
+    ad_locations: AdLocationEntity[];
     
     @CreateDateColumn()
     createdAt: Date

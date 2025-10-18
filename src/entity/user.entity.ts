@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { userRoles, userGender } from "../enum/user.enum.ts";
+import { AdEntity } from "./ad.entity.ts";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -44,6 +45,9 @@ export class UserEntity {
 
     @Column({ type: "timestamp", nullable: true, default: null })
     otpValidTill: Date | null;
+
+    @OneToMany(() => AdEntity, (ads) => ads.users)
+    ads: AdEntity[];
 
     @CreateDateColumn()
     createdAt: Date;

@@ -1,8 +1,9 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AdCategoryEntity } from "./ad_categories.ts";
+import { UserEntity } from "./user.entity.ts";
+import { AdLocationEntity } from "./ad_locations.ts";
 
-@Entity('categories')
-export class CategoryEntity {
+@Entity('ads')
+export class AdEntity {
     @PrimaryGeneratedColumn()
     id: number
 
@@ -25,8 +26,11 @@ export class CategoryEntity {
     isActive: boolean;
 
 
-    @OneToMany(() => AdCategoryEntity, (ad_categories) => ad_categories.categories)
-    ad_categories: AdCategoryEntity[];
+    @OneToMany(() => UserEntity, (users) => users.ads)
+    users: UserEntity[];
+
+    @OneToMany(() => AdLocationEntity, (ad_locations) => ad_locations.ads)
+    ad_locations : AdLocationEntity[];
 
     @CreateDateColumn()
     createdAt: Date
