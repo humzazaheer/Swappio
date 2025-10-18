@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AuthController } from "../controller/auth.controller.ts";
 import { isUserVerified } from "../middleware/user.verified.ts";
-import { isNotUserVerified } from "../middleware/user.notVerfeid.ts";
+import { isNotUserVerified } from "../middleware/user.notVerified.ts";
 
 export const authRouter = Router();
 
