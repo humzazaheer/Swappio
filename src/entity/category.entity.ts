@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AdCategoryEntity } from "./ad_categories.ts";
+import { AdCategoryEntity } from "./ad_category.ts";
 
 @Entity('categories')
 export class CategoryEntity {

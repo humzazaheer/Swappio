@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AdLocationEntity } from "./ad_locations.ts";
+import { AdLocationEntity } from "./ad_location.ts";
 
 @Entity('locations')
 export class LocationEntity {

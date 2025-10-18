@@ -1,7 +1,7 @@
 
 import { CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { AdEntity } from "./ad.entity.ts";
-import { CategoryEntity } from "./categories.entity.ts";
+import { CategoryEntity } from "./category.entity.ts";
 
 @Entity('ad_categories')
 export class AdCategoryEntity {
