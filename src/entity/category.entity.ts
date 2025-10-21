@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AdCategoryEntity } from "./ad_category.ts";
+import { AdEntity } from "./ad.entity.ts";
 
 @Entity('categories')
 export class CategoryEntity {
@@ -15,26 +15,19 @@ export class CategoryEntity {
     @Column({ nullable: false })
     slug: string
 
-    @Column({ nullable: false })
-    level: number
-
-    @Column({ nullable: true })
+    @Column({ nullable: true, default: null })
     parentId: number
 
     @Column({ default: true })
     isActive: boolean;
 
-
-    @OneToMany(() => AdCategoryEntity, (ad_categories) => ad_categories.categories)
-    ad_categories: AdCategoryEntity[];
+    @OneToMany(() => AdEntity, (ads) => ads.locations)
+    ads: AdEntity[];
 
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date
-
-
-
-
 }
+

@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { userRoles, userGender } from "../enum/user.enum.ts";
 import { AdEntity } from "./ad.entity.ts";
+import { WishlistEntity } from "./wishlist.entity.ts";
 
 @Entity({ name: "users" })
 export class UserEntity {
@@ -43,11 +44,12 @@ export class UserEntity {
     @Column({ type: "varchar", nullable: true, default: null })
     otp: string | null;
 
-    @Column({ type: "timestamp", nullable: true, default: null })
-    otpValidTill: Date | null;
 
     @OneToMany(() => AdEntity, (ads) => ads.users)
     ads: AdEntity[];
+
+    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.users)
+    wishlist: WishlistEntity[];
 
     @CreateDateColumn()
     createdAt: Date;
