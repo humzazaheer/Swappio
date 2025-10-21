@@ -5,22 +5,22 @@ import { LocationEntity } from "./location.entity.ts";
 import { CategoryEntity } from "./category.entity.ts";
 import { ImageEntity } from "./image.entity.ts";
 
-@Entity('ads')
+@Entity("ads")
 export class AdEntity {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column({ nullable: false })
-    name: string
+    name: string;
 
     @Column({ nullable: false })
     slug: string
 
     @Column({ nullable: false })
-    level: number
+    level: number;
 
     @Column({ nullable: true })
-    parentId: number
+    parentId: number;
 
     @Column({ default: true })
     isActive: boolean;
@@ -43,12 +43,8 @@ export class AdEntity {
 
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date
-
-
-
-
+    updatedAt: Date;
 }
