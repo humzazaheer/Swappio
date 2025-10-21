@@ -37,8 +37,8 @@ export class AdEntity {
     @ManyToOne(() => CategoryEntity, (categories) => categories.ads)
     categories: CategoryEntity
 
-    @ManyToOne(() => ImageEntity, (images) => images.ads)
-    images: ImageEntity
+    @OneToMany(() => ImageEntity, (images) => images.ads)
+    images: ImageEntity[]
 
 
 
