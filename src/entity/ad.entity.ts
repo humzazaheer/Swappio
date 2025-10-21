@@ -1,51 +1,50 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UserEntity } from "./user.entity.ts";
-import { AdLocationEntity } from "./ad_location.ts";
-import { AdImageEntity } from "./ad_image.entity.ts";
+import { WishlistEntity } from "./wishlist.entity.ts";
+import { LocationEntity } from "./location.entity.ts";
+import { CategoryEntity } from "./category.entity.ts";
+import { ImageEntity } from "./image.entity.ts";
 
 @Entity("ads")
 export class AdEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ nullable: false })
-  name: string;
+    @Column({ nullable: false })
+    name: string;
 
-  @Column({ nullable: true })
-  image: string;
+    @Column({ nullable: false })
+    slug: string
 
-  @Column({ nullable: false })
-  slug: string;
+    @Column({ nullable: false })
+    level: number;
 
-  @Column({ nullable: false })
-  level: number;
+    @Column({ nullable: true })
+    parentId: number;
 
-  @Column({ nullable: true })
-  parentId: number;
+    @Column({ default: true })
+    isActive: boolean;
 
-  @Column({ default: true })
-  isActive: boolean;
+    @ManyToOne(() => UserEntity, (users) => users.ads)
+    users: UserEntity
 
-  @ManyToOne(() => UserEntity, (users) => users.ads)
-  users: Promise<UserEntity>;
+    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.ads)
+    wishlist: WishlistEntity[]
 
-  @OneToMany(() => AdLocationEntity, (ad_locations) => ad_locations.ads)
-  ad_locations: AdLocationEntity[];
+    @ManyToOne(() => LocationEntity, (locations) => locations.ads)
+    locations: LocationEntity
 
-  @OneToMany(() => AdImageEntity, (ad_images) => ad_images.ads)
-  ad_images: AdImageEntity[];
+    @ManyToOne(() => CategoryEntity, (categories) => categories.ads)
+    categories: CategoryEntity
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @OneToMany(() => ImageEntity, (images) => images.ads)
+    images: ImageEntity[]
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
 }

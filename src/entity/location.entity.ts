@@ -1,27 +1,27 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AdLocationEntity } from "./ad_location.ts";
+import { AdEntity } from "./ad.entity.ts";
 
 @Entity('locations')
 export class LocationEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     name: string
 
-    @Column({nullable: false})
+    @Column({ nullable: false })
     slug: string
-    
+
     @Column({ default: true })
     isActive: boolean;
 
-    @OneToMany(() => AdLocationEntity, (ad_locations) => ad_locations.locations)
-    ad_locations: AdLocationEntity[];
-    
+    @OneToMany(() => AdEntity, (ads) => ads.locations)
+    ads: AdEntity[];
+
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date
-    
+
 }
