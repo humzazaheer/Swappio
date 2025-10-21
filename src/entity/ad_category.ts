@@ -10,7 +10,7 @@ export class AdCategoryEntity {
 
 
     @ManyToOne(() => CategoryEntity, (categories) => categories.ad_categories)
-    categories: CategoryEntity;
+    categories: Promise<CategoryEntity>;
 
 
     @CreateDateColumn()

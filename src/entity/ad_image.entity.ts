@@ -20,5 +20,5 @@ export class AdImageEntity {
   createdAt: Date;
 
   @ManyToOne(() => AdEntity, (ads) => ads.ad_images)
-  ads: AdEntity;
+  ads: Promise<AdEntity>;
 }

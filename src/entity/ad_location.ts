@@ -12,7 +12,7 @@ export class AdLocationEntity {
     locations: LocationEntity;
 
     @ManyToOne(() => AdEntity, (ads) => ads.ad_locations)
-    ads: AdEntity;
+    ads: Promise<AdEntity>;
 
     @CreateDateColumn()
     createdAt: Date

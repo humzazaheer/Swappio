@@ -35,7 +35,7 @@ export class AdEntity {
   isActive: boolean;
 
   @ManyToOne(() => UserEntity, (users) => users.ads)
-  users: UserEntity;
+  users: Promise<UserEntity>;
 
   @OneToMany(() => AdLocationEntity, (ad_locations) => ad_locations.ads)
   ad_locations: AdLocationEntity[];
