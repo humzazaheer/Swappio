@@ -45,11 +45,11 @@ export class UserEntity {
     otp: string | null;
 
 
-    @OneToMany(() => AdEntity, (ads) => ads.users)
-    ads: AdEntity[];
+    @OneToMany(() => AdEntity, (ad) => ad.user)
+    ad: Promise<AdEntity[]>;
 
-    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.users)
-    wishlist: WishlistEntity[];
+    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.user)
+    wishlist: Promise<WishlistEntity[]>;
 
     @CreateDateColumn()
     createdAt: Date;

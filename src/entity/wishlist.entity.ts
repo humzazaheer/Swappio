@@ -10,11 +10,11 @@ export class WishlistEntity {
     id: number
 
 
-    @ManyToOne(() => UserEntity, (users) => users.wishlist)
-    users: UserEntity
+    @ManyToOne(() => UserEntity, (user) => user.wishlist)
+    user: UserEntity
 
-    @ManyToOne(() => AdEntity, (ads) => ads.wishlist)
-    ads: AdEntity
+    @ManyToOne(() => AdEntity, (ad) => ad.wishlist)
+    ad: AdEntity
 
     @CreateDateColumn()
     createdAt: Date

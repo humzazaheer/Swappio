@@ -3,7 +3,7 @@ import { UserEntity } from "./user.entity.ts";
 import { WishlistEntity } from "./wishlist.entity.ts";
 import { LocationEntity } from "./location.entity.ts";
 import { CategoryEntity } from "./category.entity.ts";
-import { ImageEntity } from "./image.entity.ts";
+import { AdImageEntity } from "./ad_image.entity.ts";
 
 @Entity("ads")
 export class AdEntity {
@@ -11,34 +11,34 @@ export class AdEntity {
     id: number;
 
     @Column({ nullable: false })
-    name: string;
+    title: string;
 
     @Column({ nullable: false })
-    slug: string
+    description: string;
 
     @Column({ nullable: false })
-    level: number;
+    price: number;
 
-    @Column({ nullable: true })
-    parentId: number;
+    @Column({ nullable: false })
+    negotiable: boolean;
 
     @Column({ default: true })
     isActive: boolean;
 
-    @ManyToOne(() => UserEntity, (users) => users.ads)
-    users: UserEntity
+    @ManyToOne(() => UserEntity, (user) => user.ad)
+    user: UserEntity
 
-    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.ads)
+    @OneToMany(() => WishlistEntity, (wishlist) => wishlist.ad)
     wishlist: WishlistEntity[]
 
-    @ManyToOne(() => LocationEntity, (locations) => locations.ads)
-    locations: LocationEntity
+    @ManyToOne(() => LocationEntity, (location) => location.ad)
+    location: LocationEntity
 
-    @ManyToOne(() => CategoryEntity, (categories) => categories.ads)
-    categories: CategoryEntity
+    @ManyToOne(() => CategoryEntity, (category) => category.ad)
+    category: CategoryEntity
 
-    @OneToMany(() => ImageEntity, (images) => images.ads)
-    images: ImageEntity[]
+    @OneToMany(() => AdImageEntity, (adImage) => adImage.ad)
+    adImage: AdImageEntity[]
 
 
 

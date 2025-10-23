@@ -15,8 +15,8 @@ export class LocationEntity {
     @Column({ default: true })
     isActive: boolean;
 
-    @OneToMany(() => AdEntity, (ads) => ads.locations)
-    ads: AdEntity[];
+    @OneToMany(() => AdEntity, (ad) => ad.location)
+    ad: Promise<AdEntity[]>;
 
     @CreateDateColumn()
     createdAt: Date

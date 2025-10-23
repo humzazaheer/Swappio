@@ -19,6 +19,6 @@ export class AdImageEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => AdEntity, (ads) => ads.images)
-  ads: Promise<AdEntity>;
+  @ManyToOne(() => AdEntity, (ad) => ad.adImage)
+  ad: Promise<AdEntity>;
 }
