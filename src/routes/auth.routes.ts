@@ -1,17 +1,17 @@
 import { Router } from "express";
 import { AuthController } from "../controller/auth.controller.ts";
-import { isUserVerified } from "../middleware/user.verified.ts";
-import { isNotUserVerified } from "../middleware/user.notVerified.ts";
+import { isUserVerified, isNotUserVerified, loginValidator, authentication, resetPasswordValidator,isAuthenticated } from "../middleware/index.ts"
+
 
 export const authRouter = Router();
 
-// authRouter.post("/auth/register");
-authRouter.post("/auth/forgot-password", AuthController.forgotPassword);
-authRouter.post("/auth/verify-otp", AuthController.verifyOtp);
-authRouter.post("/auth/reset-password", AuthController.resetPassword);
-authRouter.post("/auth/login", isNotUserVerified, AuthController.login);
-authRouter.post("/auth/verify-account", isUserVerified, AuthController.verifyAccount);
+authRouter.post("/auth/verify-account", isAuthenticated, isUserVerified, AuthController.verifyAccount);
+authRouter.post("/auth/login", isAuthenticated, loginValidator, isNotUserVerified, AuthController.login);
+authRouter.post("/auth/logout", authentication, AuthController.logout);
+authRouter.post("/auth/forgot-password", isAuthenticated, AuthController.forgotPassword);
+authRouter.post("/auth/verify-otp", isAuthenticated, AuthController.verifyOtp);
+authRouter.post("/auth/reset-password", isAuthenticated, resetPasswordValidator, AuthController.resetPassword);
+authRouter.post("/auth/resend-otp", isAuthenticated, AuthController.resendOtp);
 
-// authRouter.post("/auth/forgot-password");
-// authRouter.post("/auth/reset-password");
-// authRouter.post("/auth/change-password");
+
+

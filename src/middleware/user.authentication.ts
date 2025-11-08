@@ -1,30 +1,25 @@
 import { NextFunction, Request, Response } from "express";
 import { Token } from "../helper/token.helper.ts";
-import { AuthController } from "../controller/auth.controller.ts";
 
 export const authentication = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    const header = req.headers.authorization;
-    if (!header) {
-        return res.status(401).json({ message: "Header not found, User unauthorized" });
+    const access_token = req.cookies.access_token;
+    if (!access_token) {
+        return res.status(401).json({ message: "Access token not found, User unauthorized" });
     }
 
-    const token = header.split(" ")[1];
-    if (!token) {
-        return res.status(401).json({ message: "Token not found, User unauthorized" });
-    }
 
-    const decode = await Token.verifyToken(token);
+
+    const decode = await Token.verifyToken(access_token);
     if (!decode) {
-        return res.status(401).json({ message: "Token not verified, User unauthorized" });
+        return res.status(401).json({ message: "Access token not verified, User unauthorized" });
     }
 
-    (req as any).user = decode;
-
-    // AuthController.regenerateTokens;
+    // (req as any ).user = decode;
+    req.headers["user"] = decode;
 
     next();
 };

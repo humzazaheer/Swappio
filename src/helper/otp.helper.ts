@@ -1,5 +1,5 @@
 export const otpGenerator = () => {
-
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = process.env.MODE === 'dev' ? '000000' : Math.floor(100000 + Math.random() * 900000).toString();
+    return otp
 
 }
