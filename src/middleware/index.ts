@@ -8,7 +8,9 @@ import { resetPasswordValidator } from "./reset-password.validator.ts"
 import { isAuthenticated } from "./user.isAuthenticated.ts"
 import { authorization } from "./user.authorization.ts"
 import { userValidator } from "./user.validator.ts"
-import { updateUserValidator } from "./updateUserValidator.ts"
+import { updateUserValidator } from "./updateUser.validator.ts"
+import { categoryValidator } from "./category.validator.ts"
 
 
-export { isUserVerified, isNotUserVerified, loginValidator, authentication, resetPasswordValidator, isAuthenticated, authorization, userValidator, updateUserValidator }
+
+export { isUserVerified, isNotUserVerified, loginValidator, authentication, resetPasswordValidator, isAuthenticated, authorization, userValidator, updateUserValidator, categoryValidator }

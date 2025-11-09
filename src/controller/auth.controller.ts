@@ -6,7 +6,7 @@ import { Token } from "../helper/token.helper.ts";
 import { otpGenerator } from "../helper/otp.helper.ts";
 import { mailer } from "../helper/mailer.helper.ts";
 const ACCESS_TOKEN_KEY = "access_token";
-const REFRESH_TOKEN_KEY = "referesh_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
 
 export class AuthController {
     static async login(req: Request, res: Response) {
@@ -113,7 +113,7 @@ export class AuthController {
     }
 
     static async regenerateTokens(req: Request, res: Response) {
-        const oldRefreshToken = req.cookies.referesh_token;
+        const oldRefreshToken = req.cookies.refresh_token;
 
         if (!oldRefreshToken) {
             return res.status(400).json({ message: "Refresh token is required" });

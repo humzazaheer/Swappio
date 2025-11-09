@@ -4,7 +4,7 @@ import { UserResponse } from "../dto/response/user.response.ts";
 import { Encrypt_Password } from "../helper/password.helper.ts";
 import { otpGenerator } from "../helper/otp.helper.ts";
 import { mailer } from "../helper/mailer.helper.ts";
-import { error } from "console";
+
 
 export class UserController {
   static createUser = async (req: Request, res: Response) => {
@@ -98,7 +98,8 @@ export class UserController {
   };
   // user profile
   static async userProfile(req: Request, res: Response) {
-    const user = req.cookies;
+    const user = (req as any).user;
+    // const user = req.headers["user"] as any;
 
     console.log(user);
     const userFound = await userRepository.getUserById(user.id);

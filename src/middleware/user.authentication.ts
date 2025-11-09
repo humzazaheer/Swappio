@@ -11,15 +11,15 @@ export const authentication = async (
         return res.status(401).json({ message: "Access token not found, User unauthorized" });
     }
 
-
-
-    const decode = await Token.verifyToken(access_token);
-    if (!decode) {
-        return res.status(401).json({ message: "Access token not verified, User unauthorized" });
+    try {
+        const decode = await Token.verifyToken(access_token);
+        // Attach decoded info to request object, not headers
+        (req as any).user = decode;
+        next();
+    } catch (err: any) {
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "Access token expired" });
+        }
+        return res.status(401).json({ message: "Access token not verified" });
     }
-
-    // (req as any ).user = decode;
-    req.headers["user"] = decode;
-
-    next();
 };

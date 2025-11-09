@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { AppDataSource } from "./config/data-source.ts";
-import { userRouter, authRouter, adRouter } from "./routes/index.ts";
+import { userRouter, authRouter, adRouter, categoryRouter } from "./routes/index.ts";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api', userRouter);
 app.use('/api', authRouter);
+app.use('/api', categoryRouter);
 app.use('/api', adRouter);
 
 

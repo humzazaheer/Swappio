@@ -7,9 +7,9 @@ export const isAuthenticated = async (
     next: NextFunction
 ) => {
     const access_token = req.cookies.access_token;
-    if (access_token) { 
-        return res.status(401).json({ message: "User Already Logged in." });
-    }
+    // if (access_token) { 
+    //     return res.status(401).json({ message: "User Already Logged in." });
+    // }
 
    
 
@@ -18,7 +18,7 @@ export const isAuthenticated = async (
         return res.status(401).json({ message: "User Already Logged in." });
     }
 
-    (req as any).user = decode;
+    req.headers["user"] = decode;
 
     next();
 };
