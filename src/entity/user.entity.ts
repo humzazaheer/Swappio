@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { userRoles, userGender } from "../enum/user.enum.ts";
 
+
 @Entity({ name: "users" })
 export class UserEntity {
     @PrimaryGeneratedColumn()
@@ -41,6 +42,7 @@ export class UserEntity {
 
     @Column({ type: "varchar", nullable: true, default: null })
     otp: string | null;
+
 
     @Column({ type: "timestamp", nullable: true, default: null })
     otpValidTill: Date | null;

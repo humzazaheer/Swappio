@@ -5,7 +5,7 @@ import {
   Matches
 } from "class-validator";
 
-export class UserDto {
+export class UpdateUserDto {
   @IsString()
   firstName: string;
 
@@ -14,9 +14,6 @@ export class UserDto {
 
   @IsEmail()
   email: string;
-
-  @IsString()
-  password: string;
 
   @IsString()
   role: string;
