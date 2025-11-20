@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
 import { userRoles, userGender } from "../enum/user.enum.ts";
+import { AdEntity } from "./ad.entity.ts";
+import { Exclude } from "class-transformer";
 
 
 @Entity({ name: "users" })
@@ -16,7 +18,9 @@ export class UserEntity {
     @Column({ nullable: false, unique: true })
     email: string;
 
+
     @Column({ nullable: false })
+    @Exclude()
     password: string;
 
     @Column({ type: "enum", enum: userRoles, default: userRoles.USER })
@@ -52,5 +56,8 @@ export class UserEntity {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToMany(() => AdEntity, ad => ad.user)
+    ads: Promise<AdEntity[]>;
 }
 

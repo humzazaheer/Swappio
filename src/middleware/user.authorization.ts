@@ -3,7 +3,6 @@ import { userRepository } from "../repository/index.ts";
 
 export const authorization = (roles: string[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        console.log(roles);
         // Access the user from request object
         const user = (req as any).user;
 

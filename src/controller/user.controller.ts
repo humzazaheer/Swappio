@@ -4,9 +4,11 @@ import { UserResponse } from "../dto/response/user.response.ts";
 import { Encrypt_Password } from "../helper/password.helper.ts";
 import { otpGenerator } from "../helper/otp.helper.ts";
 import { mailer } from "../helper/mailer.helper.ts";
+import { existsSync, unlink } from "node:fs";
 
 
 export class UserController {
+
   static createUser = async (req: Request, res: Response) => {
     // check if user exists
     const { email } = req.body;
@@ -84,7 +86,9 @@ export class UserController {
   static updateUser = async (req: Request, res: Response) => {
     const { id } = req.params;
 
-
+    if (req.body?.password) {
+      req.body.password = await Encrypt_Password.hashPassword(req.body.password);
+    }
     const user = await userRepository.updateUser(Number(id), req.body);
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
@@ -97,17 +101,44 @@ export class UserController {
       });
   };
   // user profile
-  static async userProfile(req: Request, res: Response) {
+ static async userProfile(req: Request, res: Response) {
     const user = (req as any).user;
-    // const user = req.headers["user"] as any;
 
-    console.log(user);
     const userFound = await userRepository.getUserById(user.id);
 
-    if (userFound) {
-      return res.status(200).json(new UserResponse(userFound));
-    } else {
-      return res.status(404).json({ message: "User not found" });
+    if (!userFound) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    // IMPORTANT: resolve lazy relation
+    const ads = await userFound.ads;
+
+    // Build response DTO with ads
+    return res.status(200).json(
+        new UserResponse({
+            ...userFound,
+            ads
+        })
+    );
+}
+
+  static async uploadProfileImage(req: Request, res: Response) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const userId = Number(req.params.id);
+      const fileName = req.file.filename;
+
+      const updatedUser = await userRepository.updateProfileImage(userId, fileName);
+
+      res.status(200).json({
+        message: "Profile image updated successfully",
+        data: updatedUser,
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   }
 

@@ -1,3 +1,5 @@
+import { AdEntity } from "../../entity/ad.entity.ts";
+
 export class UserResponse {
     id: number;
     firstName: string;
@@ -12,6 +14,7 @@ export class UserResponse {
     isActive: boolean;
     otp?: string;
     otpValidTill?: string;
+    ads: AdEntity[];
 
 
     constructor(user: any) {
@@ -28,6 +31,8 @@ export class UserResponse {
         this.isActive = user.isActive;
         this.otp = user.otp;
         this.otpValidTill = user.otpValidTill;
+        this.ads = Array.isArray(user.ads) ? user.ads : [];
+
     }
 
 }

@@ -7,10 +7,10 @@ const { JWT_SECRET = "" } = process.env;
 
 export class Token {
     static async generateToken(payload: any): Promise<string> {
-        return await jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
+        return await jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
     }
     static async generateRefereshToken(payload: any): Promise<string> {
-        return await jwt.sign(payload, JWT_SECRET, { expiresIn: "7h" });
+        return await jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 
     }
 

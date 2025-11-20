@@ -8,8 +8,8 @@ export const categoryRouter = Router();
 
 categoryRouter.post("/category/create", authentication, authorization([userRoles.ADMIN]) as any, categoryValidator, CategoryController.createCategory);
 
-categoryRouter.get("/categories", authentication, authorization([userRoles.ADMIN, userRoles.USER]) as any, CategoryController.getAllCategories);
+categoryRouter.get("/categories", CategoryController.getAllCategories);
 categoryRouter.delete("/category/delete/:id", authentication, authorization([userRoles.ADMIN]), CategoryController.deleteCategory);
-categoryRouter.get("/category/:id", authentication,authorization([userRoles.ADMIN]), CategoryController.getCategoryById);
-categoryRouter.put("/category/update/:id", authentication,authorization([userRoles.ADMIN]), CategoryController.updateCategory);
+categoryRouter.get("/category/:id", CategoryController.getCategoryById);
+categoryRouter.put("/category/update/:id", authentication, authorization([userRoles.ADMIN]), CategoryController.updateCategory);
 

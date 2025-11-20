@@ -12,6 +12,8 @@ export class AuthController {
     static async login(req: Request, res: Response) {
         const { email, password } = req.body;
         const user = await userRepository.getUserByEmail(email);
+        console.log(user);
+
         if (!user || !(await Encrypt_Password.comparePassword(password, user.password))) {
             return res.status(401).json({ message: "Invalid email or password...!" });
         }
@@ -197,7 +199,7 @@ export class AuthController {
             return res.status(400).json({ message: "Invalid or expired OTP." });
         }
 
-        await userRepository.updateUser(user.id, { password: await Encrypt_Password.hashPassword(password) });
+        await userRepository.updateUser(user.id, { password: await Encrypt_Password.hashPassword(password), otp: null, otpValidTill: null });
         res.status(200).json({ message: "Password reset successfully." });
 
     }

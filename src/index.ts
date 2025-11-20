@@ -4,6 +4,9 @@ import { AppDataSource } from "./config/data-source.ts";
 import { userRouter, authRouter, adRouter, categoryRouter } from "./routes/index.ts";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { locationRouter } from "./routes/location.routes.ts";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 
 
 dotenv.config();
@@ -13,15 +16,26 @@ const port = process.env.PORT || 4000;
 const app = express();
 
 
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 
 app.use(cookieParser());
 app.use(express.json());
+
+
 // routes
-app.use(cors());
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use('/api', userRouter);
 app.use('/api', authRouter);
 app.use('/api', categoryRouter);
 app.use('/api', adRouter);
+app.use('/api', locationRouter);
 
 
 app.listen(port, () => {

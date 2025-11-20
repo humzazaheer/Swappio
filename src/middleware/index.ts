@@ -10,7 +10,11 @@ import { authorization } from "./user.authorization.ts"
 import { userValidator } from "./user.validator.ts"
 import { updateUserValidator } from "./updateUser.validator.ts"
 import { categoryValidator } from "./category.validator.ts"
+import { locationValidator } from "./location.validator.ts"
+import { adValidator } from "./ad.validator.ts"
+import { updateAdValidator } from "./updateAd.validator.ts"
+import { adCloseValidator } from "./AdClose.validator.ts"
 
 
 
-export { isUserVerified, isNotUserVerified, loginValidator, authentication, resetPasswordValidator, isAuthenticated, authorization, userValidator, updateUserValidator, categoryValidator }
+export { isUserVerified, isNotUserVerified, loginValidator, authentication, resetPasswordValidator, isAuthenticated, authorization, userValidator, updateUserValidator, categoryValidator, locationValidator, adValidator, updateAdValidator, adCloseValidator }

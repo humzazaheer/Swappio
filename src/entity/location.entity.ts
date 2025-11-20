@@ -1,18 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
-import { userRoles, userGender } from "../enum/user.enum.ts";
 import { AdEntity } from "./ad.entity.ts";
 
 
-@Entity({ name: "categories" })
-export class CategoryEntity {
+@Entity({ name: "locations" })
+export class LocationEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ nullable: false })
     name: string;
-
-    @Column({ nullable: true })
-    image: string;
 
     @Column({ default: true })
     isActive: boolean;
@@ -23,8 +19,7 @@ export class CategoryEntity {
     @UpdateDateColumn()
     updatedAt: Date;
 
-
-    @OneToMany(() => AdEntity, ad => ad.category)
+    @OneToMany(() => AdEntity, ad => ad.location)
     ads: Promise<AdEntity[]>;
 }
 
