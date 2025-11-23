@@ -1,31 +1,83 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import * as path from "path";
+import * as fs from "fs";
+import type { Express } from "express";
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = path.join(process.cwd(), "uploads");
+const baseImageDir = path.join(process.cwd(), "image");
+if (!fs.existsSync(baseImageDir)) {
+  fs.mkdirSync(baseImageDir, { recursive: true });
+}
 
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-        }
+const generateRandomNumber = (): string => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        const ext = path.extname(file.originalname);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-    },
+const sanitizeName = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-]/g, "");
+};
+
+const profileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const profileDir = path.join(baseImageDir, "profile_image");
+    if (!fs.existsSync(profileDir)) {
+      fs.mkdirSync(profileDir, { recursive: true });
+    }
+    cb(null, profileDir);
+  },
+  filename: (req, file, cb) => {
+    const randomNum = generateRandomNumber();
+    const ext = path.extname(file.originalname);
+    const baseName = path.basename(file.originalname, ext);
+    const filename = `${baseName}-${randomNum}${ext}`;
+    cb(null, filename);
+  },
 });
 
-export const uploadFile = multer({ storage });
+// const eventStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const eventDir = path.join(baseImageDir, "event");
+//     if (!fs.existsSync(eventDir)) {
+//       fs.mkdirSync(eventDir, { recursive: true });
+//     }
+//     cb(null, eventDir);
+//   },
+//   filename: (req, file, cb) => {
+//     const randomNum = generateRandomNumber();
+//     const ext = path.extname(file.originalname);
+//     const baseName = path.basename(file.originalname, ext);
+//     const filename = `${baseName}-${randomNum}${ext}`;
+//     cb(null, filename);
+//   },
+// });
 
-// Utility: delete old file if needed
-export const deleteFile = (filePath: string) => {
-    try {
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    } catch (err) {
-        console.error("Error deleting file:", err);
-    }
+const imageFileFilter = (
+  req: any,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback
+) => {
+  const allowedMimeTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files (JPEG, JPG, PNG, GIF, WEBP) are allowed!"));
+  }
 };
+
+export const uploadProfileImage = multer({
+  storage: profileStorage,
+  fileFilter: imageFileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
+

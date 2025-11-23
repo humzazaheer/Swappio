@@ -5,8 +5,9 @@ import { userRouter, authRouter, adRouter, categoryRouter } from "./routes/index
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { locationRouter } from "./routes/location.routes.ts";
-import path, { dirname } from "path";
+import path from "path";
 import { fileURLToPath } from "url";
+import { uploadFileRouter } from "./routes/uploadFile.routes.ts";
 
 
 dotenv.config();
@@ -28,15 +29,17 @@ app.use(express.json());
 
 // routes
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// app.use("/image", express.static(path.join(__dirname, "image")));
+app.use("/image", express.static(path.join(__dirname, "../image")));
+
 app.use('/api', userRouter);
 app.use('/api', authRouter);
 app.use('/api', categoryRouter);
 app.use('/api', adRouter);
 app.use('/api', locationRouter);
-
+app.use('/api', uploadFileRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

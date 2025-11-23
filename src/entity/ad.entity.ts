@@ -20,18 +20,18 @@ export class AdEntity {
 
     @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
     price: number;
-    
+
     @Column({ default: true })
     isActive: boolean;
 
     @ManyToOne(() => UserEntity, user => user.ads)
-    user: Promise<UserEntity>;
+    user: UserEntity;
 
     @ManyToOne(() => CategoryEntity, category => category.ads)
-    category: Promise<CategoryEntity>;
+    category: CategoryEntity;
 
     @ManyToOne(() => LocationEntity, location => location.ads)
-    location: Promise<LocationEntity>;
+    location: LocationEntity;
 
     @CreateDateColumn()
     createdAt: Date;

@@ -1,6 +1,14 @@
 import { FindOptionsWhere, Repository } from "typeorm";
 import { AdEntity } from "../entity/ad.entity.ts";
-
+import { CategoryEntity } from "../entity/category.entity.ts";
+import { LocationEntity } from "../entity/location.entity.ts";
+type UpdateAdInput = {
+    title?: string;
+    description?: string;
+    price?: number;
+    categoryId?: number;
+    locationId?: number;
+};
 export class adService {
     constructor(private adRepository: Repository<AdEntity>) { }
 
@@ -28,16 +36,27 @@ export class adService {
 
         });
     }
-    async updateAd(
-        id: number,
-        AdData: Partial<AdEntity>
-    ): Promise<AdEntity | null> {
+    // async updateAd(
+    //     id: number,
+    //     AdData: Partial<AdEntity>
+    // ): Promise<AdEntity | null> {
+    //     const ad = await this.getAdById(id);
+    //     if (!ad) return null;
+
+    //     this.adRepository.merge(ad, AdData);
+    //     await this   .adRepository.save(ad);
+    //     return ad;
+    // }
+
+    async updateAd(id: number, data: UpdateAdInput): Promise<AdEntity | null> {
         const ad = await this.getAdById(id);
         if (!ad) return null;
 
-        this.adRepository.merge(ad, AdData);
-        await this.adRepository.save(ad);
-        return ad;
+        if (data.categoryId) ad.category = { id: data.categoryId } as CategoryEntity;
+        if (data.locationId) ad.location = { id: data.locationId } as LocationEntity;
+
+        this.adRepository.merge(ad, data);
+        return await this.adRepository.save(ad);
     }
 
 

@@ -49,33 +49,61 @@ export class AdController {
             data: { ad }
         });
     }
-      static getAdById = async (req: Request, res: Response) => {
-            const { id } = req.params;
-    
-    
-            const ad = await adRepository.getAdById(Number(id));
-            if (!ad) {
-                return res.status(404).json({ message: "Ad not found!" });
-            }
-            res
-                .status(200)
-            .json(ad);
-        };
-    
-    static async updateAd(req: Request, res: Response) {
-        const adId = Number(req.params.id);
-        const ad = await adRepository.updateAd(
-            adId,
-            req.body
-        );
-        if (ad) {
+    static getAdById = async (req: Request, res: Response) => {
+        const { id } = req.params;
 
-            res.status(200).json({ message: "Ad updated successfully", data: ad });
-        } else {
-            res.status(404).json({ message: "Ad not found" });
+
+        const ad = await adRepository.getAdById(Number(id));
+        if (!ad) {
+            return res.status(404).json({ message: "Ad not found!" });
         }
+        res
+            .status(200)
+            .json(ad);
+    };
 
+    static async updateAd(req: Request, res: Response) {
+        try {
+            const adId = Number(req.params.id);
+
+            const { categoryId, locationId, ...rest } = req.body;
+
+            // find ad
+            const ad = await adRepository.getAdById(adId);
+            if (!ad) {
+                return res.status(404).json({ message: "Ad not found" });
+            }
+
+            if (categoryId) {
+                const category = await categoryRepository.getCategoryById(categoryId);
+                if (!category) return res.status(400).json({ message: "Invalid categoryId" });
+                ad.category = category;
+            }
+
+            if (locationId) {
+                const location = await locationRepository.getlocationById(locationId);
+                if (!location) return res.status(400).json({ message: "Invalid locationId" });
+                ad.location = location;
+            }
+
+            // Update other fields
+            Object.assign(ad, rest);
+
+            // Save
+            const updatedAd = await adRepository.updateAd(adId, ad);
+
+            return res.status(200).json({
+                message: "Ad updated successfully",
+                data: updatedAd,
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Server error", error });
+        }
     }
+
+
     static async deleteAd(req: Request, res: Response) {
         const adId = Number(req.params.id);
         const isDeleted = await adRepository.deleteAd(adId);

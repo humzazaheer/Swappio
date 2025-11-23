@@ -101,45 +101,24 @@ export class UserController {
       });
   };
   // user profile
- static async userProfile(req: Request, res: Response) {
+  static async userProfile(req: Request, res: Response) {
     const user = (req as any).user;
 
     const userFound = await userRepository.getUserById(user.id);
 
     if (!userFound) {
-        return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // IMPORTANT: resolve lazy relation
     const ads = await userFound.ads;
 
-    // Build response DTO with ads
     return res.status(200).json(
-        new UserResponse({
-            ...userFound,
-            ads
-        })
+      new UserResponse({
+        ...userFound,
+        ads
+      })
     );
-}
-
-  static async uploadProfileImage(req: Request, res: Response) {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
-      }
-
-      const userId = Number(req.params.id);
-      const fileName = req.file.filename;
-
-      const updatedUser = await userRepository.updateProfileImage(userId, fileName);
-
-      res.status(200).json({
-        message: "Profile image updated successfully",
-        data: updatedUser,
-      });
-    } catch (error: any) {
-      res.status(500).json({ message: error.message });
-    }
   }
+
 
 }
